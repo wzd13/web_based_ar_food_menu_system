@@ -1,0 +1,6 @@
+certs/*.pem
+certs/*.key
+certs/phone-url.txt
+certs/openssl.cnf
+Thumbs.db
+.DS_Store

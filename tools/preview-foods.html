@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Food model check</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "/assets/vendor/three/three.module.js"
+        }
+    }
+    </script>
+    <style>
+        body { margin: 0; background: #1b1410; color: #fffaf4; font-family: sans-serif; }
+        h1 { font-size: 16px; padding: 12px; }
+        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; padding: 12px; }
+        canvas { width: 100%; height: 160px; background: #2a2018; border-radius: 12px; }
+        p { margin: 6px 0 0; text-align: center; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <h1 id="title">Checking 3D food models…</h1>
+    <div id="grid"></div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { createFood, FOOD_MODELS } from '../assets/js/foods.js?v=17';
+        const grid = document.getElementById('grid');
+        const names = Object.keys(FOOD_MODELS);
+        let meshes = 0;
+        names.forEach((type) => {
+            const wrap = document.createElement('div');
+            const canvas = document.createElement('canvas');
+            wrap.appendChild(canvas);
+            const label = document.createElement('p');
+            label.textContent = type;
+            wrap.appendChild(label);
+            grid.appendChild(wrap);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+            renderer.setSize(160, 160, false);
+            renderer.setClearColor(0x2a2018, 1);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 20);
+            camera.position.set(0.8, 1.2, 2.2);
+            camera.lookAt(0, 0.28, 0);
+            scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+            const food = createFood(THREE, type);
+            food.traverse((obj) => { if (obj.isMesh) meshes += 1; });
+            scene.add(food);
+            renderer.render(scene, camera);
+        });
+        document.getElementById('title').textContent = '3D models OK · ' + names.length + ' dishes · ' + meshes + ' meshes';
+        window.__foodPreview = { count: names.length, meshes };
+    </script>
+</body>
+</html>

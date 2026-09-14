@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Compile tracking</title>
+</head>
+<body>
+    <p id="log">Starting…</p>
+    <img id="menu" alt="" src="../assets/images/menu.jpg">
+    <script type="module">
+        import { Compiler } from '../assets/vendor/mindar/mindar-image.prod.js';
+
+        const log = document.getElementById('log');
+        const image = document.getElementById('menu');
+        const note = (text) => { log.textContent = text; };
+
+        try {
+            await new Promise((resolve, reject) => {
+                if (image.complete && image.naturalWidth) {
+                    resolve();
+                    return;
+                }
+                image.onload = () => resolve();
+                image.onerror = () => reject(new Error('The menu image could not be loaded.'));
+            });
+            note('Compiling the menu. Keep this tab open.');
+            const compiler = new Compiler();
+            await compiler.compileImageTargets([image], (progress) => {
+                const percent = progress <= 1 ? Math.round(progress * 100) : Math.round(progress);
+                note('Compiling… ' + percent + '%');
+            });
+            const exported = await compiler.exportData();
+            const bytes = exported instanceof ArrayBuffer ? new Uint8Array(exported) : exported;
+            const body = new FormData();
+            body.append('target', new Blob([bytes], { type: 'application/octet-stream' }), 'menu.mind');
+            const response = await fetch('../api/save-target.php', {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'ARMenu' },
+                body
+            });
+            const payload = await response.json();
+            if (!response.ok || !payload.ok) {
+                throw new Error(payload.error || 'The tracking file could not be saved.');
+            }
+            note('DONE ' + payload.bytes);
+        } catch (error) {
+            note('ERROR ' + (error && error.message ? error.message : error));
+        }
+    </script>
+</body>
+</html>
