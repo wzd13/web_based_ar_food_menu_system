@@ -57,3 +57,7 @@ Do not upload `certs/key.pem` or `certs/cert.pem`. Those are only for local HTTP
 5. Move closer to one food photo. Only that dish’s 3D model appears.
 
 If you change the poster or dish boxes, open Prepare, save the layout, then compile tracking again so `assets/targets/menu.mind` matches the new image.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
