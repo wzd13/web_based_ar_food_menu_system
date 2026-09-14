@@ -2,9 +2,31 @@
 
 Web AR food menu. Open it on a phone, aim at a dish photo on the poster, and only that dish appears as a slowly rotating 3D model.
 
-Live site: [https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_System/](https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_System/)
+## Screenshots
 
-Scanner: [https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_System/ar.php](https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_System/ar.php)
+### Home
+
+Poster preview and shortcuts to the menu, scanner, and tracking editor.
+
+![Home](docs/screenshots/home.png)
+
+### Display menu
+
+The tracking poster. Show this on a screen or print it; the scanner must see this same picture.
+
+![Display menu](docs/screenshots/menu.png)
+
+### Prepare AR tracking
+
+Upload a poster, mark each food photo, save the layout, then compile the tracking file.
+
+![Prepare AR tracking](docs/screenshots/prepare.png)
+
+### Scan in AR
+
+Phone camera page. Allow the camera, then aim at the poster. Only the dish you point at appears in 3D.
+
+![Scan in AR](docs/screenshots/scan.png)
 
 ## Pages
 
@@ -12,8 +34,18 @@ Scanner: [https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_System/ar.php](h
 | --- | --- | --- |
 | Home | `index.php` | Poster preview and QR code for the phone scanner |
 | Menu | `menu.php` | Full poster to display or print |
-| Scan | `ar.php` | Camera, image tracking, one 3D dish at a time |
 | Prepare | `compile.php` | Upload a poster, mark dishes, compile tracking |
+| Scan | `ar.php` | Camera, image tracking, one 3D dish at a time |
+
+## How scanning works
+
+1. Display or print `assets/images/menu.jpg`.
+2. Open `ar.php` on a phone over HTTPS.
+3. Allow the rear camera.
+4. Hold the poster still until the menu locks.
+5. Move closer to one food photo. Only that dish’s 3D model appears.
+
+If you change the poster or dish boxes, open Prepare, save the layout, then compile tracking again so `assets/targets/menu.mind` matches the new image.
 
 ## Requirements
 
@@ -47,16 +79,6 @@ define('PUBLIC_ORIGIN', 'https://junzhe.kolejsynergy.com/Web_Based_AR_FoodMenu_S
 7. On the phone open Safari or Chrome (not WeChat), allow the camera, then aim at the same poster.
 
 Do not upload `certs/key.pem` or `certs/cert.pem`. Those are only for local HTTPS.
-
-## How scanning works
-
-1. Display or print `assets/images/menu.jpg` (the compiled poster).
-2. Open `ar.php` on a phone over HTTPS.
-3. Allow the rear camera.
-4. Hold the poster still until the menu locks.
-5. Move closer to one food photo. Only that dish’s 3D model appears.
-
-If you change the poster or dish boxes, open Prepare, save the layout, then compile tracking again so `assets/targets/menu.mind` matches the new image.
 
 ## License
 
